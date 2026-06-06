@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo-wrap">
+        <div class="hex-logo">⌬</div>
+    </div>
+
+    <nav class="nav">
+        <a class="nav-item {% if active_page == 'dashboard' %}active{% endif %}" href="/">
+            <span>▦</span>
+            <small>Dashboard</small>
+        </a>
+
+        <a class="nav-item {% if active_page == 'scans' %}active{% endif %}" href="/scans">
+            <span>▧</span>
+            <small>Scans</small>
+        </a>
+
+        <a class="nav-item {% if active_page == 'patients' %}active{% endif %}" href="/patients">
+            <span>◔</span>
+            <small>Patients</small>
+        </a>
+
+        <a class="nav-item {% if active_page == 'analytics' %}active{% endif %}" href="/analytics">
+            <span>▥</span>
+            <small>Analytics</small>
+        </a>
+
+        <a class="nav-item {% if active_page == 'model' %}active{% endif %}" href="/model">
+            <span>▩</span>
+            <small>Model<br>Performance</small>
+        </a>
+
+        <a class="nav-item {% if active_page == 'settings' %}active{% endif %}" href="/settings">
+            <span>⚙</span>
+            <small>Settings</small>
+        </a>
+
+        <a class="nav-item {% if active_page == 'help' %}active{% endif %}" href="/help">
+            <span>?</span>
+            <small>Help & Support</small>
+        </a>
+
+        <a class="nav-item {% if active_page == 'about' %}active{% endif %}" href="/about">
+            <span>i</span>
+            <small>About</small>
+        </a>
+    </nav>
+
+    <div class="security-box">
+        <div class="shield">✚</div>
+        <p>Secure • Private • Compliant</p>
+        <small>Educational AI screening system.</small>
+    </div>
+</aside>
+
+<main class="main">
+
+    <header class="topbar">
+        <div>
+            <h1>{{ heading }} <span>{{ heading_span }}</span></h1>
+            <p>{{ subtitle }}</p>
+        </div>
+
+        <div class="top-actions">
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+        🌙 Dark
+    </button>
+
+    <a href="/scans" class="solid-btn top-link">⊕ New Scan</a>
+    <a href="/model" class="outline-btn top-link">▤ Model Status</a>
+    <button type="button" class="outline-btn" onclick="window.print()">▣ Export PDF</button>
+</div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+</main>
+<script>
+    function applySavedTheme() {
+        const savedTheme = localStorage.getItem("derma-theme");
+        const themeToggle = document.getElementById("themeToggle");
+
+        if (savedTheme === "dark") {
+            document.body.classList.add("dark-mode");
+
+            if (themeToggle) {
+                themeToggle.innerHTML = "☀️ Light";
+            }
+        } else {
+            document.body.classList.remove("dark-mode");
+
+            if (themeToggle) {
+                themeToggle.innerHTML = "🌙 Dark";
+            }
+        }
+    }
+
+    function toggleTheme() {
+        const isDark = document.body.classList.toggle("dark-mode");
+        const themeToggle = document.getElementById("themeToggle");
+
+        if (isDark) {
+            localStorage.setItem("derma-theme", "dark");
+
+            if (themeToggle) {
+                themeToggle.innerHTML = "☀️ Light";
+            }
+        } else {
+            localStorage.setItem("derma-theme", "light");
+
+            if (themeToggle) {
+                themeToggle.innerHTML = "🌙 Dark";
+            }
+        }
+    }
+
+    applySavedTheme();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,599 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="scan-layout">
+
+    <!-- Upload -->
+    <div class="card upload-card clean-upload">
+        <h3>Upload Skin Lesion Image</h3>
+        {% if error_message %}
+<div class="error-alert">
+    ⚠ {{ error_message }}
+</div>
+{% endif %}
+
+        <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data" class="upload-form">
+            <label class="drop-zone" for="imageInput">
+                <input id="imageInput" type="file" name="image" accept="image/png,image/jpeg,image/jpg" required>
+
+                <div class="cloud">☁</div>
+
+                <b>
+                    Click to upload dermoscopic /<br>
+                    clinical skin image
+                </b>
+
+                <small id="fileName">Supported formats: JPG, PNG, JPEG</small>
+            </label>
+
+            <div class="button-row">
+                <button type="submit" class="solid-btn wide">Run Diagnosis</button>
+                <button type="button" class="outline-btn wide fake-button" onclick="openCamera()">Capture Camera</button>
+            </div>
+        </form>
+
+        <div id="cameraBox" class="camera-box">
+            <video id="cameraVideo" autoplay playsinline></video>
+
+            <div class="button-row">
+                <button type="button" class="solid-btn wide" onclick="capturePhoto()">Capture Photo</button>
+                <button type="button" class="outline-btn wide" onclick="closeCamera()">Close Camera</button>
+            </div>
+
+            <canvas id="cameraCanvas"></canvas>
+        </div>
+
+        <div class="info-note">
+            <b>i</b>
+            <span>For screening support only. Final diagnosis should be confirmed by a dermatologist.</span>
+        </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="card preview-card">
+        <h3>Input Image Preview</h3>
+
+        <img src="{{ image_url }}" class="lesion-img large-preview" alt="Input image preview">
+
+        <div class="chip-row">
+            <div class="chip">
+                <b>Image Quality:</b>
+                <span class="good">Good</span>
+            </div>
+
+            <div class="chip">
+                <b>Resolution:</b>
+                224 × 224
+            </div>
+        </div>
+
+        <div class="chip long">
+            <b>Preprocessing:</b>
+            Resized, normalized, ImageNet standardization
+        </div>
+    </div>
+    <!-- Live Preprocessing Pipeline -->
+<div class="card preprocessing-card scan-wide">
+    <div class="preprocess-header">
+        <div>
+            <h3>Preprocessing Pipeline Preview</h3>
+            <p>See how the uploaded image is converted into AI-ready input before ResNet-18 prediction.</p>
+        </div>
+
+        <span class="preprocess-badge">Live AI Pipeline</span>
+    </div>
+
+    <div class="preprocess-grid">
+        <div class="preprocess-step">
+            <span>Step 01</span>
+            <h4>Original Uploaded Image</h4>
+            <img src="{{ image_url }}" alt="Original uploaded image">
+            <p>User uploaded skin lesion image.</p>
+        </div>
+
+        <div class="preprocess-arrow">➜</div>
+
+        <div class="preprocess-step">
+            <span>Step 02</span>
+            <h4>Resized Image</h4>
+            <img src="{{ resized_image_url }}" alt="Resized image">
+            <p>Image resized to 224 × 224 pixels.</p>
+            <b>224 × 224</b>
+        </div>
+
+        <div class="preprocess-arrow">➜</div>
+
+        <div class="preprocess-step">
+            <span>Step 03</span>
+            <h4>AI-ready Normalized Image</h4>
+            <img src="{{ normalized_image_url }}" alt="Normalized image">
+            <p>Normalized using ImageNet mean and standard deviation.</p>
+            <b>Ready for ResNet-18</b>
+        </div>
+
+        <div class="preprocess-checklist">
+            <h4>Preprocessing Steps</h4>
+
+            <div>✓ RGB conversion completed</div>
+            <div>✓ Resized to 224 × 224</div>
+            <div>✓ Tensor conversion completed</div>
+            <div>✓ Normalized using ImageNet mean/std</div>
+            <div>✓ Ready for ResNet-18 inference</div>
+        </div>
+    </div>
+</div>
+
+    <!-- Result -->
+    <div class="card result-card scan-result-card">
+        <h3>AI Diagnosis Result</h3>
+
+        <p class="muted">Predicted Class:</p>
+
+        <h2 class="{% if prediction.lower() == 'malignant' %}danger-text{% elif prediction.lower() == 'benign' %}safe-text{% else %}neutral-text{% endif %}">
+            {{ prediction }}
+        </h2>
+
+        <div class="line"></div>
+
+        <div class="result-row">
+            <span>Confidence Score:</span>
+            <b class="{% if prediction.lower() == 'malignant' %}danger-text{% elif prediction.lower() == 'benign' %}safe-text{% else %}neutral-text{% endif %}">
+                {{ confidence|round(1) }}%
+            </b>
+        </div>
+
+        <div class="result-row small">
+            <span>Risk Level:</span>
+            <b class="{% if 'High' in risk %}danger-text{% elif 'Low' in risk %}safe-text{% else %}neutral-text{% endif %}">
+                {{ risk }}
+            </b>
+        </div>
+
+        <p class="result-desc">
+            {{ summary }}
+        </p>
+
+        <button class="solid-btn report-btn" type="button" onclick="printHospitalReport()">
+            Generate Full Report
+        </button>
+    </div>
+
+    <!-- Confidence -->
+    <div class="card confidence-card">
+        <div class="circle-wrap">
+            <svg class="confidence-svg" viewBox="0 0 120 120">
+                <circle class="circle-bg" cx="60" cy="60" r="48"></circle>
+
+                <circle
+                    id="confidenceProgress"
+                    class="circle-progress"
+                    cx="60"
+                    cy="60"
+                    r="48"
+                    pathLength="100">
+                </circle>
+
+                <text x="60" y="55" text-anchor="middle" class="circle-text">
+                    {{ confidence|round(1) }}%
+                </text>
+
+                <text x="60" y="75" text-anchor="middle" class="circle-label">
+                    AI Confidence
+                </text>
+            </svg>
+        </div>
+
+        <input type="hidden" id="confidenceValue" value="{{ confidence|round(1) }}">
+
+        <ul class="legend">
+            <li><span class="red-dot"></span>High Confidence (80–100%)</li>
+            <li><span class="orange-dot"></span>Moderate Confidence (50–79%)</li>
+            <li><span class="green-dot"></span>Low Confidence (&lt;50%)</li>
+        </ul>
+    </div>
+
+    <!-- Probability -->
+    <div class="card probability-card scan-wide">
+        <h3>Class Probability Distribution</h3>
+
+        {% for label, prob in probs %}
+        <div class="prob-row">
+            <span>{{ label }}</span>
+
+            <progress
+                class="{% if loop.index == 1 %}progress-red{% elif loop.index == 2 %}progress-orange{% else %}progress-blue{% endif %}"
+                value="{{ prob|round(1) }}"
+                max="100">
+            </progress>
+
+            <b>{{ prob|round(1) }}%</b>
+        </div>
+        {% endfor %}
+
+        <div class="axis">
+            <span>0%</span>
+            <span>25%</span>
+            <span>50%</span>
+            <span>75%</span>
+            <span>100%</span>
+        </div>
+    </div>
+
+    <!-- Diagnosis Report -->
+    <div class="card diagnosis-report scan-report-card">
+        <h3>Diagnosis Report</h3>
+
+        <table class="report-table">
+            <tr>
+                <td>Patient ID:</td>
+                <td>Auto-generated</td>
+            </tr>
+
+            <tr>
+                <td>Date:</td>
+                <td>02 June 2026</td>
+            </tr>
+
+            <tr>
+                <td>Model Used:</td>
+                <td>ResNet-18 CNN</td>
+            </tr>
+
+            <tr>
+                <td>Input Type:</td>
+                <td>Skin Lesion Image</td>
+            </tr>
+
+            <tr>
+                <td>Predicted Class:</td>
+                <td class="red">{{ prediction }}</td>
+            </tr>
+
+            <tr>
+                <td>Confidence Score:</td>
+                <td class="red">{{ confidence|round(1) }}%</td>
+            </tr>
+
+            <tr>
+                <td>Risk Level:</td>
+                <td class="red">{{ risk }}</td>
+            </tr>
+
+            <tr>
+                <td>Recommendation:</td>
+                <td class="red">
+                    {% if prediction.lower() == 'malignant' %}
+                        Consult dermatologist
+                    {% elif prediction.lower() == 'benign' %}
+                        Monitor changes
+                    {% else %}
+                        Run diagnosis first
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+        <button class="solid-btn report-btn" type="button" onclick="printHospitalReport()">
+            Download Full Report
+        </button>
+    </div>
+
+    <!-- Basis -->
+    <div class="card basis-card scan-wide">
+        <h3>Basis of AI Prediction</h3>
+
+        <div class="basis-grid">
+            {% if prediction.lower() == 'malignant' %}
+            <div class="basis-item"><div>◌</div><b>1. Color Variation</b><p>The lesion shows uneven dark and light color distribution.</p></div>
+            <div class="basis-item"><div>☼</div><b>2. Border Irregularity</b><p>The boundary appears uneven, which may indicate suspicious growth.</p></div>
+            <div class="basis-item"><div>▦</div><b>3. Texture Pattern</b><p>The CNN detected rough texture and abnormal structural variation.</p></div>
+            <div class="basis-item"><div>↔</div><b>4. Shape Asymmetry</b><p>The lesion does not appear fully symmetrical.</p></div>
+            <div class="basis-item"><div>♧</div><b>5. Malignant Feature Match</b><p>The deep model matched the image with malignant training patterns.</p></div>
+            {% elif prediction.lower() == 'benign' %}
+            <div class="basis-item"><div>◌</div><b>1. Stable Color</b><p>The lesion appears closer to benign color distribution patterns.</p></div>
+            <div class="basis-item"><div>☼</div><b>2. Softer Boundary</b><p>The model found fewer highly irregular border features.</p></div>
+            <div class="basis-item"><div>▦</div><b>3. Texture Similarity</b><p>Texture patterns matched more closely with benign examples.</p></div>
+            <div class="basis-item"><div>↔</div><b>4. Lower Risk Shape</b><p>The lesion shape appears less suspicious to the model.</p></div>
+            <div class="basis-item"><div>♧</div><b>5. Benign Feature Match</b><p>The CNN matched the image with benign training patterns.</p></div>
+            {% else %}
+            <div class="basis-item"><div>◌</div><b>1. Waiting for Image</b><p>Upload a skin lesion image to analyze color features.</p></div>
+            <div class="basis-item"><div>☼</div><b>2. Border Analysis</b><p>AI will check lesion boundary after prediction.</p></div>
+            <div class="basis-item"><div>▦</div><b>3. Texture Pattern</b><p>Texture-based features will be analyzed by the CNN.</p></div>
+            <div class="basis-item"><div>↔</div><b>4. Shape Analysis</b><p>Shape symmetry will be evaluated after upload.</p></div>
+            <div class="basis-item"><div>♧</div><b>5. Deep Feature Matching</b><p>The trained model will compare image features with learned patterns.</p></div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Heatmap -->
+    <div class="card heatmap-card scan-wide">
+        <h3>AI Attention Heatmap <span class="muted">ⓘ</span></h3>
+
+        <div class="heatmap-content-fixed">
+            <div class="heatmap-box">
+                <p>Original Image</p>
+                <img src="{{ image_url }}" class="heatmap-original-img" alt="Original image">
+            </div>
+
+            <div class="heatmap-box">
+                <p>AI Focus Area</p>
+
+                <div class="heatmap-overlay-box">
+                    <img src="{{ image_url }}" class="heatmap-original-img" alt="AI focus image">
+                    <div class="heatmap-overlay"></div>
+                </div>
+            </div>
+
+            <div class="heatmap-explain">
+                <p>
+                    Highlighted red/orange regions show approximate areas that influenced the AI prediction.
+                    This visualization is an interpretability aid, not a medical localization tool.
+                </p>
+
+                <button class="outline-btn heatmap-btn" type="button" onclick="alert('Heatmap shows approximate AI focus area based on lesion image features.')">
+                    View Heatmap Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="card summary-card scan-wide">
+        <div class="summary-icon">▤</div>
+
+        <div>
+            <h3>Generated Medical Summary</h3>
+            <p id="summaryText">{{ summary }}</p>
+        </div>
+
+        <div class="summary-actions">
+            <button class="outline-btn" type="button" onclick="copySummary()">Copy Summary</button>
+            <button class="solid-btn" type="button" onclick="printHospitalReport()">Download PDF Report</button>
+        </div>
+    </div>
+
+</section>
+
+<!-- Hidden printable hospital report -->
+<section id="hospitalReport" class="hospital-report-print">
+    <div class="hospital-report-page">
+
+        <div class="hospital-header">
+            <div>
+                <h1>DermaVision AI</h1>
+                <p>Skin Cancer Diagnosis & Risk Screening Report</p>
+            </div>
+
+            <div class="hospital-meta">
+                <b>AI Diagnostic Unit</b><br>
+                Report ID: DV-2026-0001<br>
+                Date: 02 June 2026
+            </div>
+        </div>
+
+        <div class="hospital-section">
+            <h2>Patient & Scan Information</h2>
+
+            <div class="hospital-grid">
+                <div><span>Patient ID</span><b>Auto-generated</b></div>
+                <div><span>Input Type</span><b>Skin Lesion Image</b></div>
+                <div><span>Model Used</span><b>ResNet-18 CNN</b></div>
+                <div><span>System Type</span><b>Educational AI Screening</b></div>
+            </div>
+        </div>
+
+        <div class="hospital-section">
+            <h2>AI Diagnosis Result</h2>
+
+            <div class="hospital-result-grid">
+                <div class="hospital-result-card">
+                    <span>Predicted Class</span>
+
+                    <h3 class="{% if prediction.lower() == 'malignant' %}danger-text{% elif prediction.lower() == 'benign' %}safe-text{% endif %}">
+                        {{ prediction }}
+                    </h3>
+
+                    <div class="hospital-row">
+                        <p>Confidence Score</p>
+                        <b>{{ confidence|round(1) }}%</b>
+                    </div>
+
+                    <div class="hospital-row">
+                        <p>Risk Level</p>
+                        <b>{{ risk }}</b>
+                    </div>
+
+                    <div class="hospital-row">
+                        <p>Recommendation</p>
+                        <b>
+                            {% if prediction.lower() == 'malignant' %}
+                                Consult dermatologist
+                            {% elif prediction.lower() == 'benign' %}
+                                Monitor changes
+                            {% else %}
+                                Run diagnosis first
+                            {% endif %}
+                        </b>
+                    </div>
+                </div>
+
+                <div class="hospital-image-card">
+                    <img src="{{ image_url }}" alt="Uploaded lesion image">
+                    <p>Uploaded skin lesion image</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="hospital-section">
+            <h2>AI Generated Medical Summary</h2>
+            <p class="hospital-summary">{{ summary }}</p>
+        </div>
+
+        <div class="hospital-section">
+            <h2>Clinical Interpretation</h2>
+
+            <table class="hospital-table">
+                <tr>
+                    <th>Assessment Factor</th>
+                    <th>Interpretation</th>
+                </tr>
+                <tr>
+                    <td>Color Variation</td>
+                    <td>The AI model considers pigmentation and color distribution patterns.</td>
+                </tr>
+                <tr>
+                    <td>Border Pattern</td>
+                    <td>The model checks lesion boundary irregularity and shape structure.</td>
+                </tr>
+                <tr>
+                    <td>Texture Features</td>
+                    <td>The CNN extracts deep texture-based image features.</td>
+                </tr>
+                <tr>
+                    <td>Confidence Reliability</td>
+                    <td>Confidence represents model certainty, not final medical diagnosis.</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="hospital-warning">
+            <b>Medical Disclaimer:</b>
+            This report is generated by an educational AI system. It is not a replacement for professional medical diagnosis, treatment, or clinical decision-making. A qualified dermatologist must verify suspicious cases.
+        </div>
+
+        <div class="hospital-signatures">
+            <div>
+                AI System Generated Report<br>
+                DermaVision AI
+            </div>
+
+            <div>
+                Reviewed By<br>
+                __________________________
+            </div>
+        </div>
+
+        <div class="hospital-footer">
+            DermaVision AI · Educational Use Only · Generated Report
+        </div>
+    </div>
+</section>
+<script>
+    const imageInput = document.getElementById("imageInput");
+    const fileName = document.getElementById("fileName");
+    const confidenceValue = document.getElementById("confidenceValue");
+    const confidenceProgress = document.getElementById("confidenceProgress");
+
+    if (imageInput) {
+        imageInput.addEventListener("change", function () {
+            if (this.files && this.files.length > 0) {
+                fileName.textContent = "Selected: " + this.files[0].name;
+            }
+        });
+    }
+
+    if (confidenceProgress && confidenceValue) {
+        const value = parseFloat(confidenceValue.value) || 0;
+        confidenceProgress.style.strokeDasharray = value + " 100";
+
+        if (value >= 80) {
+            confidenceProgress.style.stroke = "#e41f2a";
+        } else if (value >= 50) {
+            confidenceProgress.style.stroke = "#f59e0b";
+        } else {
+            confidenceProgress.style.stroke = "#179348";
+        }
+    }
+
+    function copySummary() {
+        const summaryElement = document.getElementById("summaryText");
+
+        if (!summaryElement) {
+            alert("Summary is not available yet.");
+            return;
+        }
+
+        navigator.clipboard.writeText(summaryElement.innerText);
+        alert("Medical summary copied successfully!");
+    }
+
+    function printHospitalReport() {
+        const prediction = "{{ prediction }}";
+        const confidence = parseFloat("{{ confidence|round(1) }}") || 0;
+
+        if (prediction === "Waiting for Scan" || confidence === 0) {
+            alert("Please run AI diagnosis first, then generate the report.");
+            return;
+        }
+
+        document.body.classList.add("print-report-mode");
+
+        setTimeout(function () {
+            window.print();
+
+            setTimeout(function () {
+                document.body.classList.remove("print-report-mode");
+            }, 800);
+        }, 300);
+    }
+
+    let cameraStream = null;
+
+    async function openCamera() {
+        const cameraBox = document.getElementById("cameraBox");
+        const video = document.getElementById("cameraVideo");
+
+        try {
+            cameraBox.style.display = "block";
+            cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = cameraStream;
+        } catch (error) {
+            alert("Camera could not be opened. Please allow camera permission or upload an image manually.");
+        }
+    }
+
+    function closeCamera() {
+        const cameraBox = document.getElementById("cameraBox");
+
+        if (cameraStream) {
+            cameraStream.getTracks().forEach(function (track) {
+                track.stop();
+            });
+        }
+
+        cameraBox.style.display = "none";
+    }
+
+    function capturePhoto() {
+        const video = document.getElementById("cameraVideo");
+        const canvas = document.getElementById("cameraCanvas");
+        const imageInput = document.getElementById("imageInput");
+
+        if (!video || !canvas || !imageInput) {
+            alert("Camera is not ready.");
+            return;
+        }
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        const context = canvas.getContext("2d");
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob(function (blob) {
+            const file = new File([blob], "camera_capture.png", { type: "image/png" });
+            const dataTransfer = new DataTransfer();
+
+            dataTransfer.items.add(file);
+            imageInput.files = dataTransfer.files;
+
+            document.getElementById("fileName").textContent = "Selected: camera_capture.png";
+
+            closeCamera();
+        }, "image/png");
+    }
+</script>
+
+
+{% endblock %}

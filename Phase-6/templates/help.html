@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="content-page help-page">
+
+    <div class="card content-card help-hero">
+        <div>
+            <span class="status-pill">Help & Support</span>
+            <h2>How to Use DermaVision AI</h2>
+            <p>
+                This guide explains how to upload a skin lesion image, run AI diagnosis,
+                interpret confidence score, understand risk levels, and generate a professional report.
+            </p>
+        </div>
+
+        <div class="hero-score">
+            <h3>5</h3>
+            <p>Simple Steps</p>
+        </div>
+    </div>
+
+    <div class="card content-card">
+        <h2>Quick Start Guide</h2>
+
+        <div class="help-steps-grid">
+            <div class="help-step-card">
+                <div>1</div>
+                <h3>Open Scans Page</h3>
+                <p>Go to the Scans page from the sidebar or click New Scan from the top bar.</p>
+            </div>
+
+            <div class="help-step-card">
+                <div>2</div>
+                <h3>Upload Image</h3>
+                <p>Select a JPG, JPEG, or PNG skin lesion image from your computer.</p>
+            </div>
+
+            <div class="help-step-card">
+                <div>3</div>
+                <h3>Run Diagnosis</h3>
+                <p>Click Run Diagnosis and wait for the AI model to generate prediction results.</p>
+            </div>
+
+            <div class="help-step-card">
+                <div>4</div>
+                <h3>Review Result</h3>
+                <p>Check predicted class, confidence score, risk level, and AI-generated summary.</p>
+            </div>
+
+            <div class="help-step-card">
+                <div>5</div>
+                <h3>Download Report</h3>
+                <p>Click Download PDF Report and choose Save as PDF from the print dialog.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="help-grid">
+
+        <div class="card content-card">
+            <h2>Risk Level Guide</h2>
+
+            <div class="risk-guide-list">
+                <div class="risk-guide-item">
+                    <span class="risk-pill low-risk">Low Risk</span>
+                    <p>
+                        Usually shown when the model predicts benign class with strong confidence.
+                        Routine monitoring is suggested.
+                    </p>
+                </div>
+
+                <div class="risk-guide-item">
+                    <span class="risk-pill medium-risk">Medium Risk</span>
+                    <p>
+                        Used when prediction is uncertain or confidence is moderate.
+                        Clinical confirmation is recommended.
+                    </p>
+                </div>
+
+                <div class="risk-guide-item">
+                    <span class="risk-pill high-risk">High Risk</span>
+                    <p>
+                        Used when the model predicts malignant class with high confidence.
+                        Dermatologist consultation is strongly recommended.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card content-card">
+            <h2>Supported Image Rules</h2>
+
+            <table class="clean-table help-table">
+                <tr>
+                    <td>File Types</td>
+                    <td>JPG, JPEG, PNG</td>
+                </tr>
+
+                <tr>
+                    <td>Recommended Image</td>
+                    <td>Clear lesion image with good lighting</td>
+                </tr>
+
+                <tr>
+                    <td>Image Size</td>
+                    <td>Automatically resized to 224 × 224</td>
+                </tr>
+
+                <tr>
+                    <td>Input Type</td>
+                    <td>Skin lesion / dermoscopic image</td>
+                </tr>
+
+                <tr>
+                    <td>Output</td>
+                    <td>Prediction, confidence, risk level, summary</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="help-grid">
+
+        <div class="card content-card">
+            <h2>Common Issues</h2>
+
+            <div class="faq-list">
+                <details>
+                    <summary>Why is the report button not working?</summary>
+                    <p>
+                        First run diagnosis by uploading an image. Report generation works only after
+                        prediction result is available.
+                    </p>
+                </details>
+
+                <details>
+                    <summary>Why does camera capture not open?</summary>
+                    <p>
+                        Allow camera permission in the browser. If permission is blocked, upload an image manually.
+                    </p>
+                </details>
+
+                <details>
+                    <summary>Why does Internal Server Error appear?</summary>
+                    <p>
+                        Usually it means a template file is missing, file name is misspelled, or HTML/Jinja syntax has an error.
+                    </p>
+                </details>
+
+                <details>
+                    <summary>Why is confidence not equal to medical certainty?</summary>
+                    <p>
+                        Confidence is only the model probability score. It does not replace clinical diagnosis.
+                    </p>
+                </details>
+            </div>
+        </div>
+
+        <div class="card content-card">
+            <h2>Troubleshooting Checklist</h2>
+
+            <ul class="help-checklist">
+                <li>Make sure server is running with <b>python -m uvicorn app:app --reload</b></li>
+                <li>Check that templates folder contains all required HTML files.</li>
+                <li>Make sure file name is exactly <b>scans.html</b>, not scan.html or scans.htnl.</li>
+                <li>Open <b>/health</b> to verify model is loaded.</li>
+                <li>Use <b>Ctrl + F5</b> to hard refresh browser after CSS/HTML changes.</li>
+                <li>Check terminal traceback if a page shows Internal Server Error.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="card support-card">
+        <div>
+            <span class="status-pill">Need Help?</span>
+            <h2>Project Support Note</h2>
+            <p>
+                This system is created for Phase 6 academic demonstration. In a real deployment,
+                support would include authentication, secure patient database, audit logs,
+                and doctor review workflow.
+            </p>
+        </div>
+
+        <a href="/scans" class="solid-btn top-link">Start a New Scan</a>
+    </div>
+
+</section>
+
+{% endblock %}

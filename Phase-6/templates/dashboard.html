@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page-grid dashboard-home">
+
+    <div class="card hero-card">
+        <div>
+            <span class="status-pill">AI Model Active</span>
+            <h2>Skin Cancer Diagnosis Dashboard</h2>
+            <p>
+                DermaVision AI is an educational deep learning system for early skin cancer screening.
+                It classifies lesion images as benign or malignant and generates a confidence-based risk summary.
+            </p>
+
+            <div class="hero-actions">
+                <a href="/scans" class="solid-btn top-link">Start New Diagnosis</a>
+                <a href="/model" class="outline-btn top-link">View Model Results</a>
+            </div>
+        </div>
+
+        <div class="hero-score">
+            <h3>89.7%</h3>
+            <p>Final Test Accuracy</p>
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <span>Total Test Images</span>
+        <h3>5000</h3>
+     <p>Large-scale skin lesion test collection</p>   
+    </div>
+
+    <div class="card stat-card">
+        <span>Macro F1-score</span>
+        <h3>89.59%</h3>
+        <p>Balanced performance across classes</p>
+    </div>
+
+    <div class="card stat-card">
+        <span>Model Size</span>
+        <h3>42.97 MB</h3>
+        <p>ResNet-18 full fine-tuning</p>
+    </div>
+
+    <div class="card stat-card">
+        <span>Latency</span>
+        <h3>0.07s</h3>
+        <p>Single image CPU inference</p>
+    </div>
+
+    <div class="card workflow-card">
+        <h3>System Workflow</h3>
+
+        <div class="workflow-steps">
+            <div><b>1</b><span>Upload Image</span></div>
+            <div><b>2</b><span>Preprocess</span></div>
+            <div><b>3</b><span>AI Prediction</span></div>
+            <div><b>4</b><span>Risk Summary</span></div>
+            <div><b>5</b><span>Report</span></div>
+        </div>
+    </div>
+
+    <div class="card recent-card">
+        <h3>Project Highlights</h3>
+
+        <table class="clean-table">
+            <tr>
+                <td>Best Transfer Learning</td>
+                <td>Full Fine-Tuning</td>
+            </tr>
+            <tr>
+                <td>Final Accuracy</td>
+                <td>89.70%</td>
+            </tr>
+            <tr>
+                <td>Baseline Accuracy</td>
+                <td>67.88%</td>
+            </tr>
+            <tr>
+                <td>Improvement</td>
+                <td>+21.82%</td>
+            </tr>
+        </table>
+    </div>
+
+</section>
+
+{% endblock %}

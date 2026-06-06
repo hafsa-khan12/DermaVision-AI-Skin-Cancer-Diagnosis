@@ -1,0 +1,211 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="content-page analytics-page">
+
+    <div class="card content-card analytics-hero">
+        <div>
+            <span class="status-pill">Diagnosis Analytics</span>
+            <h2>AI Diagnosis Performance Overview</h2>
+            <p>
+                This page presents the analytical overview of the DermaVision AI system, including
+                dataset distribution, model performance comparison, confidence behavior, and risk-level summary.
+            </p>
+        </div>
+
+        <div class="hero-score">
+            <h3>+21.82%</h3>
+            <p>Accuracy Improvement</p>
+        </div>
+    </div>
+
+    <div class="analytics-metrics-grid">
+
+        <div class="card stat-card">
+            <span>Total Test Images</span>
+            <h3>5000</h3>
+            <p>Large-scale skin lesion test collection</p>
+        </div>
+
+        <div class="card stat-card">
+            <span>Final Accuracy</span>
+            <h3>89.7%</h3>
+            <p>Best final model performance</p>
+        </div>
+
+        <div class="card stat-card">
+            <span>Macro F1-score</span>
+            <h3>89.59%</h3>
+            <p>Balanced class performance</p>
+        </div>
+
+        <div class="card stat-card">
+            <span>Average Latency</span>
+            <h3>0.07s</h3>
+            <p>Single image CPU inference</p>
+        </div>
+
+    </div>
+
+    <div class="analytics-grid">
+
+        <div class="card content-card">
+            <h2>Diagnosis Distribution</h2>
+
+            <div class="donut-wrap">
+                <div class="donut-chart">
+                    <div class="donut-center">
+                        <h3>5000</h3>
+                        <p>Total Images</p>
+                    </div>
+                </div>
+
+                <div class="donut-legend">
+                    <div><span class="legend-green"></span>Benign Cases <b>54.5%</b></div>
+                    <div><span class="legend-red"></span>Malignant Cases <b>45.5%</b></div>
+                    <div><span class="legend-blue"></span>Reviewed Samples <b>100%</b></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card content-card">
+            <h2>Accuracy Comparison</h2>
+
+            <div class="bar-chart-box">
+                <div class="bar-row">
+                    <span>Baseline Model</span>
+                    <div class="bar-track">
+                        <div class="bar-fill baseline-bar"></div>
+                    </div>
+                    <b>67.88%</b>
+                </div>
+
+                <div class="bar-row">
+                    <span>Feature Extraction</span>
+                    <div class="bar-track">
+                        <div class="bar-fill feature-bar"></div>
+                    </div>
+                    <b>80.00%</b>
+                </div>
+
+                <div class="bar-row">
+                    <span>Differential LR</span>
+                    <div class="bar-track">
+                        <div class="bar-fill diff-bar"></div>
+                    </div>
+                    <b>85.57%</b>
+                </div>
+
+                <div class="bar-row">
+                    <span>Full Fine-Tuning</span>
+                    <div class="bar-track">
+                        <div class="bar-fill final-bar"></div>
+                    </div>
+                    <b>89.70%</b>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="analytics-grid">
+
+        <div class="card content-card">
+            <h2>Risk Level Summary</h2>
+
+            <table class="clean-table analytics-table">
+                <tr>
+                    <th>Risk Level</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+
+                <tr>
+                    <td><span class="risk-pill high-risk">High Risk</span></td>
+                    <td>Malignant prediction with high confidence</td>
+                    <td>Dermatologist review recommended</td>
+                </tr>
+
+                <tr>
+                    <td><span class="risk-pill medium-risk">Medium Risk</span></td>
+                    <td>Uncertain or lower-confidence suspicious case</td>
+                    <td>Clinical confirmation suggested</td>
+                </tr>
+
+                <tr>
+                    <td><span class="risk-pill low-risk">Low Risk</span></td>
+                    <td>Benign prediction with stable confidence</td>
+                    <td>Routine monitoring advised</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card content-card">
+            <h2>Confidence Interpretation</h2>
+
+            <div class="confidence-scale-box">
+                <div class="confidence-scale-line"></div>
+
+                <div class="confidence-scale-labels">
+                    <span>Low<br>&lt;50%</span>
+                    <span>Moderate<br>50–79%</span>
+                    <span>High<br>80–100%</span>
+                </div>
+            </div>
+
+            <p class="analytics-note">
+                Confidence score represents model certainty, not a final clinical diagnosis.
+                High confidence results should still be reviewed by a medical professional.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="card content-card">
+        <h2>Recent Diagnosis Activity</h2>
+
+        <table class="clean-table analytics-table">
+            <tr>
+                <th>Scan ID</th>
+                <th>Input Type</th>
+                <th>Predicted Class</th>
+                <th>Confidence</th>
+                <th>Risk Level</th>
+                <th>Status</th>
+            </tr>
+
+            <tr>
+                <td>DV-2026-001</td>
+                <td>Skin Lesion Image</td>
+                <td>Benign</td>
+                <td>99.8%</td>
+                <td>Low Risk</td>
+                <td><span class="status-pill-table complete">Completed</span></td>
+            </tr>
+
+            <tr>
+                <td>DV-2026-002</td>
+                <td>Skin Lesion Image</td>
+                <td>Malignant</td>
+                <td>91.4%</td>
+                <td>High Risk</td>
+                <td><span class="status-pill-table review">Review Needed</span></td>
+            </tr>
+
+            <tr>
+                <td>DV-2026-003</td>
+                <td>Skin Lesion Image</td>
+                <td>Benign</td>
+                <td>87.2%</td>
+                <td>Low Risk</td>
+                <td><span class="status-pill-table complete">Completed</span></td>
+            </tr>
+        </table>
+    </div>
+
+</section>
+
+{% endblock %}

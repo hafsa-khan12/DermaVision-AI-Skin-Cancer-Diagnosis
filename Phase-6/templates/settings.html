@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="content-page settings-page">
+
+    <div class="card content-card settings-hero">
+        <div>
+            <span class="status-pill">System Settings</span>
+            <h2>DermaVision AI Configuration</h2>
+            <p>
+                This page displays system configuration, model setup, upload rules, report preferences,
+                and deployment information used by the DermaVision AI dashboard.
+            </p>
+        </div>
+
+        <div class="hero-score">
+            <h3>CPU</h3>
+            <p>Current Device</p>
+        </div>
+    </div>
+
+    <div class="settings-grid">
+
+        <div class="card content-card settings-card">
+            <div class="settings-icon">🧠</div>
+            <h2>Model Settings</h2>
+
+            <table class="clean-table settings-table">
+                <tr>
+                    <td>Model Architecture</td>
+                    <td>ResNet-18 CNN</td>
+                </tr>
+
+                <tr>
+                    <td>Training Strategy</td>
+                    <td>Full Fine-Tuning</td>
+                </tr>
+
+                <tr>
+                    <td>Input Size</td>
+                    <td>224 × 224</td>
+                </tr>
+
+                <tr>
+                    <td>Classes</td>
+                    <td>Benign / Malignant</td>
+                </tr>
+
+                <tr>
+                    <td>Checkpoint</td>
+                    <td>transfer_full_finetune_best.pth</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card content-card settings-card">
+            <div class="settings-icon">📤</div>
+            <h2>Upload Settings</h2>
+
+            <table class="clean-table settings-table">
+                <tr>
+                    <td>Supported Formats</td>
+                    <td>JPG, JPEG, PNG</td>
+                </tr>
+
+                <tr>
+                    <td>Input Type</td>
+                    <td>Skin Lesion Image</td>
+                </tr>
+
+                <tr>
+                    <td>Preprocessing</td>
+                    <td>Resize + Normalize</td>
+                </tr>
+
+                <tr>
+                    <td>Validation</td>
+                    <td>Image file required</td>
+                </tr>
+
+                <tr>
+                    <td>Storage</td>
+                    <td>Local uploads folder</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="settings-grid">
+
+        <div class="card content-card settings-card">
+            <div class="settings-icon">📄</div>
+            <h2>Report Settings</h2>
+
+            <div class="toggle-list">
+                <div>
+                    <span>Include Prediction Class</span>
+                    <b class="toggle-on">Enabled</b>
+                </div>
+
+                <div>
+                    <span>Include Confidence Score</span>
+                    <b class="toggle-on">Enabled</b>
+                </div>
+
+                <div>
+                    <span>Include Risk Level</span>
+                    <b class="toggle-on">Enabled</b>
+                </div>
+
+                <div>
+                    <span>Include Medical Summary</span>
+                    <b class="toggle-on">Enabled</b>
+                </div>
+
+                <div>
+                    <span>Include Disclaimer</span>
+                    <b class="toggle-on">Enabled</b>
+                </div>
+            </div>
+        </div>
+
+        <div class="card content-card settings-card">
+            <div class="settings-icon">🔐</div>
+            <h2>Privacy & Security</h2>
+
+            <div class="security-list">
+                <div>
+                    <b>Local Processing</b>
+                    <p>Uploaded images are processed locally through FastAPI and PyTorch inference.</p>
+                </div>
+
+                <div>
+                    <b>Educational Use</b>
+                    <p>The current version is designed for academic demonstration and prototype testing.</p>
+                </div>
+
+                <div>
+                    <b>Future Security</b>
+                    <p>Real deployment should include login, role-based access, encryption, and audit logs.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card content-card">
+        <h2>System Status</h2>
+
+        <div class="system-status-grid">
+            <div class="system-status-card active-status">
+                <span>Backend API</span>
+                <h3>Active</h3>
+                <p>FastAPI server is running</p>
+            </div>
+
+            <div class="system-status-card active-status">
+                <span>Model Checkpoint</span>
+                <h3>Loaded</h3>
+                <p>Best fine-tuned model available</p>
+            </div>
+
+            <div class="system-status-card active-status">
+                <span>Prediction Route</span>
+                <h3>Ready</h3>
+                <p>/predict endpoint active</p>
+            </div>
+
+            <div class="system-status-card warning-status">
+                <span>Clinical Approval</span>
+                <h3>Demo Only</h3>
+                <p>Not certified for medical use</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card content-card">
+        <h2>Future Enhancement Settings</h2>
+
+        <div class="future-grid">
+            <div>
+                <span>01</span>
+                <h3>User Authentication</h3>
+                <p>Add admin, doctor, and patient login roles.</p>
+            </div>
+
+            <div>
+                <span>02</span>
+                <h3>Patient Database</h3>
+                <p>Store scan records securely with patient history.</p>
+            </div>
+
+            <div>
+                <span>03</span>
+                <h3>Real Grad-CAM</h3>
+                <p>Generate true heatmap visualization from model layers.</p>
+            </div>
+
+            <div>
+                <span>04</span>
+                <h3>Cloud Deployment</h3>
+                <p>Deploy the system using a secure production server.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

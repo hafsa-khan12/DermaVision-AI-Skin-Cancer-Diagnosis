@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="about-modern-page">
+
+    <!-- Hero -->
+    <div class="card about-modern-hero">
+        <div class="about-hero-content">
+            <span class="status-pill">AI Medical Screening Project</span>
+
+            <h2>DermaVision AI</h2>
+            <h3>Smart Skin Cancer Diagnosis & Risk Screening System</h3>
+
+            <p>
+                DermaVision AI is a deep learning powered web application designed to support
+                early skin cancer screening. It analyzes skin lesion images, predicts benign or
+                malignant class, calculates confidence score, explains prediction basis, and
+                generates a professional medical-style report.
+            </p>
+
+            <div class="about-hero-actions">
+                <a href="/scans" class="solid-btn top-link">Start Diagnosis</a>
+                <a href="/model" class="outline-btn top-link">View Model Performance</a>
+            </div>
+        </div>
+
+        <div class="about-hero-visual">
+            <div class="ai-orb">AI</div>
+            <div class="orb-stat">
+                <b>89.7%</b>
+                <span>Final Accuracy</span>
+            </div>
+            <div class="orb-stat">
+                <b>0.07s</b>
+                <span>Inference Time</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mission Vision -->
+    <div class="about-modern-grid">
+        <div class="card about-feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Project Objective</h3>
+            <p>
+                To build a professional AI-based diagnosis interface that supports early screening
+                of skin cancer using image classification, confidence scoring, and risk assessment.
+            </p>
+        </div>
+
+        <div class="card about-feature-card">
+            <div class="feature-icon">⚕️</div>
+            <h3>Problem Statement</h3>
+            <p>
+                Skin cancer symptoms can visually overlap with harmless skin lesions. This system
+                demonstrates how deep learning can assist in medical image screening workflows.
+            </p>
+        </div>
+
+        <div class="card about-feature-card">
+            <div class="feature-icon">🧠</div>
+            <h3>AI Approach</h3>
+            <p>
+                The system uses a ResNet-18 transfer learning model trained to classify skin lesion
+                images into benign and malignant categories.
+            </p>
+        </div>
+    </div>
+
+    <!-- Modules -->
+    <div class="card content-card">
+        <div class="section-heading-row">
+            <div>
+                <span class="status-pill">System Modules</span>
+                <h2>How the Application Works</h2>
+            </div>
+            <p>Complete diagnosis workflow from image upload to report generation.</p>
+        </div>
+
+        <div class="modern-module-grid">
+            <div class="modern-module-card">
+                <div>📤</div>
+                <h3>Image Upload</h3>
+                <p>Upload JPG, PNG, or JPEG skin lesion images.</p>
+            </div>
+
+            <div class="modern-module-card">
+                <div>⚙️</div>
+                <h3>Preprocessing</h3>
+                <p>Resize, normalize, and prepare image for AI inference.</p>
+            </div>
+
+            <div class="modern-module-card">
+                <div>🧠</div>
+                <h3>AI Prediction</h3>
+                <p>ResNet-18 predicts benign or malignant lesion class.</p>
+            </div>
+
+            <div class="modern-module-card">
+                <div>📊</div>
+                <h3>Confidence Score</h3>
+                <p>Probability-based confidence score is generated.</p>
+            </div>
+
+            <div class="modern-module-card">
+                <div>⚠️</div>
+                <h3>Risk Assessment</h3>
+                <p>Risk level is assigned based on prediction confidence.</p>
+            </div>
+
+            <div class="modern-module-card">
+                <div>📄</div>
+                <h3>Report Generation</h3>
+                <p>Printable professional medical-style report is generated.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tech + Method -->
+    <div class="about-modern-grid two-col">
+        <div class="card content-card">
+            <span class="status-pill">Technology Stack</span>
+            <h2>Tools & Frameworks</h2>
+
+            <div class="tech-pills">
+                <span>FastAPI</span>
+                <span>PyTorch</span>
+                <span>Torchvision</span>
+                <span>ResNet-18</span>
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+                <span>PIL</span>
+            </div>
+
+            <p class="about-muted">
+                The frontend is designed using custom HTML/CSS, while FastAPI handles backend
+                routing and PyTorch manages model inference.
+            </p>
+        </div>
+
+        <div class="card content-card">
+            <span class="status-pill">Methodology</span>
+            <h2>Development Flow</h2>
+
+            <div class="timeline">
+                <div>
+                    <b>01</b>
+                    <p>Dataset organized into benign and malignant classes.</p>
+                </div>
+
+                <div>
+                    <b>02</b>
+                    <p>Images resized to 224 × 224 and normalized.</p>
+                </div>
+
+                <div>
+                    <b>03</b>
+                    <p>Transfer learning applied using pretrained ResNet-18.</p>
+                </div>
+
+                <div>
+                    <b>04</b>
+                    <p>Model integrated with FastAPI for real-time prediction.</p>
+                </div>
+
+                <div>
+                    <b>05</b>
+                    <p>Dashboard, analytics, report, and scan pages designed.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Impact -->
+    <div class="card about-impact-card">
+        <div>
+            <span class="status-pill">Project Impact</span>
+            <h2>Why This Project Matters</h2>
+            <p>
+                This project demonstrates how AI can support healthcare screening workflows by
+                providing fast image-based prediction, risk-level explanation, and structured
+                reporting. It is useful for academic learning, prototype demonstration, and
+                understanding AI-assisted medical decision support systems.
+            </p>
+        </div>
+
+        <div class="impact-stats">
+            <div>
+                <b>89.7%</b>
+                <span>Accuracy</span>
+            </div>
+
+            <div>
+                <b>+21.82%</b>
+                <span>Improvement</span>
+            </div>
+
+            <div>
+                <b>42.97 MB</b>
+                <span>Model Size</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="card medical-disclaimer-card">
+        <div class="feature-icon">⚠️</div>
+        <div>
+            <h2>Medical Disclaimer</h2>
+            <p>
+                DermaVision AI is developed for academic and educational purposes only. It is not a
+                certified medical device and must not be used as a replacement for professional
+                medical diagnosis, treatment, or clinical decision-making. Any suspicious skin lesion
+                should be examined by a qualified dermatologist.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

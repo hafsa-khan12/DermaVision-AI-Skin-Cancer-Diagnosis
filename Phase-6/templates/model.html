@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="content-page model-performance-page">
+
+    <div class="card content-card model-hero">
+        <div>
+            <span class="status-pill">Final Model Evaluation</span>
+            <h2>ResNet-18 Skin Cancer Classification Model</h2>
+            <p>
+                This page summarizes the final trained deep learning model used in DermaVision AI.
+                The model classifies skin lesion images into benign and malignant categories using
+                transfer learning and full fine-tuning.
+            </p>
+        </div>
+
+        <div class="hero-score">
+            <h3>89.7%</h3>
+            <p>Final Accuracy</p>
+        </div>
+    </div>
+
+    <div class="model-metrics-grid">
+
+        <div class="card stat-card">
+            <span>Final Accuracy</span>
+            <h3>89.7%</h3>
+            <p>Final test accuracy after transfer learning</p>
+        </div>
+
+        <div class="card stat-card">
+            <span>Macro F1-score</span>
+            <h3>89.59%</h3>
+            <p>Balanced class-wise performance</p>
+        </div>
+
+        <div class="card stat-card">
+            <span>Baseline Accuracy</span>
+            <h3>67.88%</h3>
+            <p>Initial baseline model performance</p>
+        </div>
+
+        <div class="card stat-card">
+            <span>Accuracy Gain</span>
+            <h3>+21.82%</h3>
+            <p>Improvement over baseline model</p>
+        </div>
+
+    </div>
+
+    <div class="model-section-grid">
+
+        <div class="card content-card">
+            <h2>Classification Report</h2>
+
+            <table class="clean-table model-table">
+                <tr>
+                    <th>Class</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1-score</th>
+                    <th>Support</th>
+                </tr>
+
+                <tr>
+                    <td>Benign</td>
+                    <td>0.90</td>
+                    <td>0.92</td>
+                    <td>0.91</td>
+                    <td>360</td>
+                </tr>
+
+                <tr>
+                    <td>Malignant</td>
+                    <td>0.90</td>
+                    <td>0.87</td>
+                    <td>0.89</td>
+                    <td>300</td>
+                </tr>
+
+                <tr>
+                    <td><b>Accuracy</b></td>
+                    <td colspan="3"><b>0.90</b></td>
+                    <td><b>660</b></td>
+                </tr>
+
+                <tr>
+                    <td><b>Macro Avg</b></td>
+                    <td>0.90</td>
+                    <td>0.90</td>
+                    <td>0.90</td>
+                    <td>660</td>
+                </tr>
+
+                <tr>
+                    <td><b>Weighted Avg</b></td>
+                    <td>0.90</td>
+                    <td>0.90</td>
+                    <td>0.90</td>
+                    <td>660</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card content-card">
+            <h2>Model Efficiency</h2>
+
+            <table class="clean-table model-table">
+                <tr>
+                    <td>Device Used</td>
+                    <td><b>CPU</b></td>
+                </tr>
+
+                <tr>
+                    <td>Total Parameters</td>
+                    <td><b>11,242,434</b></td>
+                </tr>
+
+                <tr>
+                    <td>Trainable Parameters</td>
+                    <td><b>11,242,434</b></td>
+                </tr>
+
+                <tr>
+                    <td>Frozen Parameters</td>
+                    <td><b>0</b></td>
+                </tr>
+
+                <tr>
+                    <td>Checkpoint Size</td>
+                    <td><b>42.97 MB</b></td>
+                </tr>
+
+                <tr>
+                    <td>Single Image Latency</td>
+                    <td><b>0.070s</b></td>
+                </tr>
+
+                <tr>
+                    <td>Batch Size 32 Latency</td>
+                    <td><b>1.36s</b></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="card content-card">
+        <h2>Configuration Comparison</h2>
+
+        <table class="clean-table model-table">
+            <tr>
+                <th>Configuration</th>
+                <th>Best Val Accuracy</th>
+                <th>Best Val Loss</th>
+                <th>Best Epoch</th>
+                <th>Total Params</th>
+                <th>Trainable Params</th>
+                <th>Frozen Params</th>
+            </tr>
+
+            <tr>
+                <td>Feature Extraction</td>
+                <td>0.8000</td>
+                <td>0.4022</td>
+                <td>3</td>
+                <td>11,242,434</td>
+                <td>65,922</td>
+                <td>11,176,512</td>
+            </tr>
+
+            <tr>
+                <td><b>Full Fine-Tuning</b></td>
+                <td><b>0.8937</b></td>
+                <td><b>0.3136</b></td>
+                <td><b>3</b></td>
+                <td><b>11,242,434</b></td>
+                <td><b>11,242,434</b></td>
+                <td><b>0</b></td>
+            </tr>
+
+            <tr>
+                <td>Differential LR</td>
+                <td>0.8557</td>
+                <td>0.3823</td>
+                <td>4</td>
+                <td>11,242,434</td>
+                <td>10,559,362</td>
+                <td>683,072</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="model-section-grid">
+
+        <div class="card content-card pipeline-card">
+    <h2>Model Pipeline</h2>
+    <p class="pipeline-intro">
+        The trained ResNet-18 model follows a complete image-processing and prediction workflow,
+        from image upload to medical summary generation.
+    </p>
+
+    <div class="pipeline-diagram">
+
+        <div class="pipeline-step">
+            <div class="pipeline-icon">📤</div>
+            <span>Step 01</span>
+            <h4>Input Image</h4>
+            <p>Upload skin lesion image</p>
+        </div>
+
+        <div class="pipeline-arrow">➜</div>
+
+        <div class="pipeline-step">
+            <div class="pipeline-icon">🖼️</div>
+            <span>Step 02</span>
+            <h4>Resize</h4>
+            <p>Convert image to 224 × 224</p>
+        </div>
+
+        <div class="pipeline-arrow">➜</div>
+
+        <div class="pipeline-step">
+            <div class="pipeline-icon">⚙️</div>
+            <span>Step 03</span>
+            <h4>Normalize</h4>
+            <p>Apply ImageNet statistics</p>
+        </div>
+
+        <div class="pipeline-arrow">➜</div>
+
+        <div class="pipeline-step">
+            <div class="pipeline-icon">🧠</div>
+            <span>Step 04</span>
+            <h4>Feature Extraction</h4>
+            <p>ResNet-18 learns deep features</p>
+        </div>
+
+        <div class="pipeline-arrow">➜</div>
+
+        <div class="pipeline-step">
+            <div class="pipeline-icon">🔍</div>
+            <span>Step 05</span>
+            <h4>Prediction</h4>
+            <p>Benign or malignant class</p>
+        </div>
+
+        <div class="pipeline-arrow">➜</div>
+
+        <div class="pipeline-step">
+            <div class="pipeline-icon">📄</div>
+            <span>Step 06</span>
+            <h4>Report</h4>
+            <p>Confidence, risk & summary</p>
+        </div>
+
+    </div>
+</div>
+
+        <div class="card content-card">
+            <h2>Statistical Summary</h2>
+
+            <table class="clean-table model-table">
+                <tr>
+                    <td>Accuracy Mean</td>
+                    <td><b>0.897</b></td>
+                </tr>
+
+                <tr>
+                    <td>Accuracy Std</td>
+                    <td><b>0.0</b></td>
+                </tr>
+
+                <tr>
+                    <td>Accuracy 95% CI</td>
+                    <td><b>0.897 - 0.897</b></td>
+                </tr>
+
+                <tr>
+                    <td>Macro F1 Mean</td>
+                    <td><b>0.8959</b></td>
+                </tr>
+
+                <tr>
+                    <td>Macro F1 95% CI</td>
+                    <td><b>0.8959 - 0.8959</b></td>
+                </tr>
+
+                <tr>
+                    <td>Effect Size Accuracy Gain</td>
+                    <td><b>0.2182</b></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="card content-card">
+        <h2>Conclusion</h2>
+        <p>
+            The final ResNet-18 full fine-tuning configuration achieved the strongest validation
+            and final testing performance. Compared with the baseline model, the final model improved
+            accuracy by 21.82%, showing that transfer learning significantly improved classification
+            capability for skin lesion diagnosis. The model is suitable for educational screening
+            support, but it should not be used as a replacement for clinical diagnosis.
+        </p>
+    </div>
+
+</section>
+
+{% endblock %}
